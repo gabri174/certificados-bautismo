@@ -3,104 +3,103 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Generador de certificados</title>
+  <meta name="theme-color" content="#172a4a">
+  <title>Certificados · Editor</title>
   <link rel="stylesheet" href="/app.css">
 </head>
 <body>
 <header class="topbar no-print">
-  <div><div class="brand">Certificados</div><div class="muted">autom.ensupresencia.eu · A4 horizontal</div></div>
-  <div class="toolbar"><button id="loadTemplates">Cargar plantillas</button><button id="saveTemplate">Guardar plantilla</button><button id="saveCertificate" class="primary">Guardar certificado</button><button id="print" class="primary">Imprimir / Guardar PDF</button></div>
+  <div class="brand-block"><div class="brand">Certificados</div><div class="muted">autom.ensupresencia.eu · Editor A4 horizontal</div></div>
+  <div class="top-actions">
+    <button id="loadTemplates">Cargar plantillas</button>
+    <button id="saveTemplate">Guardar plantilla</button>
+    <button id="saveCertificate" class="primary">Guardar certificado</button>
+    <button id="print" class="primary">Imprimir / Guardar PDF</button>
+  </div>
 </header>
-<main class="workspace">
+
+<main class="workspace no-print-shell">
   <aside class="panel no-print">
     <div class="panel-head"><h1>Editor</h1><span class="pill">A4 horizontal</span></div>
     <label>Plantilla<select id="templateSelect"></select></label>
-    <label>Clave de administración<input id="adminToken" type="password" placeholder="ADMIN_TOKEN"></label>
+    <label class="password-label">Clave de administración<div class="password-wrap"><input id="adminToken" type="password" placeholder="ADMIN_TOKEN"><button id="toggleToken" type="button" aria-label="Mostrar clave">◉</button></div></label>
+
+    <details open><summary>Marca superior</summary>
+      <div class="upload-box" id="topUploadBox"><span class="upload-icon">▧</span><strong>Arrastra una imagen o haz clic</strong><small>PNG, JPG, WEBP o SVG · máx. 900 KB</small><input id="topImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></div>
+      <button id="removeTopImage" type="button" class="danger-outline">Quitar logo</button>
+    </details>
+
+    <details open><summary>Tipografías</summary>
+      <div class="tabs"><button type="button" class="tab active" data-tab="google">Google Fonts</button><button type="button" class="tab" data-tab="custom">Subir fuente (DaFont)</button></div>
+      <div id="googleFontsPanel">
+        <label>Tipografía general<select data-key="bodyFont" id="bodyFont"><option value="Montserrat">Montserrat</option><option value="Lora">Lora</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="Playfair Display">Playfair Display</option><option value="Cinzel">Cinzel</option></select></label>
+        <label>Tipografía del título<select data-key="titleFont" id="titleFont"><option value="Montserrat">Montserrat</option><option value="Cinzel">Cinzel</option><option value="Playfair Display">Playfair Display</option><option value="Cormorant Garamond">Cormorant Garamond</option></select></label>
+        <label>Tipografía del nombre<select data-key="nameFont" id="nameFont"><option value="Great Vibes">Great Vibes</option><option value="Allura">Allura</option><option value="Dancing Script">Dancing Script</option><option value="Cormorant Garamond">Cormorant Garamond</option></select></label>
+      </div>
+      <div id="customFontPanel" hidden>
+        <div class="upload-box compact"><span class="upload-icon">Aa</span><strong>Sube una fuente</strong><small>.TTF · .OTF · .WOFF · .WOFF2</small><input id="customFontFile" type="file" accept=".woff,.woff2,.ttf,.otf,font/woff,font/woff2,font/ttf,font/otf"></div>
+        <div id="customFontName" class="font-status">Sin fuente personalizada</div>
+        <button id="removeCustomFont" type="button">Quitar fuente</button>
+      </div>
+    </details>
 
     <details open><summary>Contenido</summary>
       <label>Texto superior<input data-key="eyebrow"></label>
-      <label>Título<input data-key="title"></label>
+      <label>Título principal<input data-key="title"></label>
       <label>Subtítulo<input data-key="subtitle"></label>
       <label>Nombre<input data-key="name"></label>
       <label>Texto principal<textarea data-key="body"></textarea></label>
       <label>Cita<textarea data-key="quote"></textarea></label>
       <label>Versículo<input data-key="verse"></label>
-      <label>Fecha<input data-key="date"></label>
-      <label>CIF<input data-key="taxId"></label>
+      <div class="two-cols"><label>Fecha<input data-key="date"></label><label>CIF<input data-key="taxId"></label></div>
       <label>Dirección<input data-key="address"></label>
     </details>
 
-    <details open><summary>Marca y firmas</summary>
-      <label>Logo superior<input id="topImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>
-      <button id="removeTopImage" type="button">Quitar logo superior</button>
-      <label>Texto/logo si no hay imagen<input data-key="logo"></label>
-      <label>Firma izquierda (imagen)<input id="leftSignatureFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>
-      <label>Firma derecha (imagen)<input id="rightSignatureFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>
-      <button id="removeSignatures" type="button">Quitar imágenes de firmas</button>
-      <label>Nombre firma izquierda<input data-key="leftSignature"></label>
-      <label>Cargo izquierdo<input data-key="leftRole"></label>
-      <label>Nombre firma derecha<input data-key="rightSignature"></label>
-      <label>Cargo derecho<input data-key="rightRole"></label>
-      <label>Marca central inferior<input data-key="footerMark"></label>
-    </details>
-
-    <details open><summary>Tipografías</summary>
-      <label>Tipografía general<select data-key="bodyFont" id="bodyFont">
-        <option value="Arial">Arial</option><option value="Montserrat">Montserrat</option><option value="Playfair Display">Playfair Display</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="Cinzel">Cinzel</option><option value="Lora">Lora</option>
-      </select></label>
-      <label>Tipografía del título<select data-key="titleFont" id="titleFont">
-        <option value="Arial Black">Arial Black</option><option value="Montserrat">Montserrat</option><option value="Playfair Display">Playfair Display</option><option value="Cinzel">Cinzel</option><option value="Cormorant Garamond">Cormorant Garamond</option>
-      </select></label>
-      <label>Tipografía del nombre<select data-key="nameFont" id="nameFont">
-        <option value="Great Vibes">Great Vibes</option><option value="Allura">Allura</option><option value="Dancing Script">Dancing Script</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="Playfair Display">Playfair Display</option>
-      </select></label>
-      <label>Fuente personalizada (DaFont u otra)<input id="customFontFile" type="file" accept=".woff,.woff2,.ttf,.otf,font/woff,font/woff2,font/ttf,font/otf"></label>
-      <button id="removeCustomFont" type="button">Quitar fuente personalizada</button>
-      <div class="help">Las tipografías de Google se cargan automáticamente. Para fuentes de DaFont, descarga el archivo de fuente y súbelo aquí; así puedes usarlo en el certificado sin depender de que el navegador encuentre la fuente.</div>
+    <details><summary>Firmas</summary>
+      <div class="upload-box compact"><span class="upload-icon">✍</span><strong>Firma izquierda</strong><small>Imagen PNG/JPG/WEBP/SVG</small><input id="leftSignatureFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></div>
+      <label>Nombre izquierdo<input data-key="leftSignature"></label><label>Cargo izquierdo<input data-key="leftRole"></label>
+      <div class="upload-box compact"><span class="upload-icon">✍</span><strong>Firma derecha</strong><small>Imagen PNG/JPG/WEBP/SVG</small><input id="rightSignatureFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></div>
+      <label>Nombre derecho<input data-key="rightSignature"></label><label>Cargo derecho<input data-key="rightRole"></label>
     </details>
 
     <details><summary>Diseño</summary>
-      <label>Color del papel<input data-key="paperColor" type="color"></label>
-      <label>Color tinta<input data-key="inkColor" type="color"></label>
-      <label>Color acento<input data-key="accentColor" type="color"></label>
-      <label>Mostrar barra inferior<select data-key="showFooterBar"><option value="true">Sí</option><option value="false">No</option></select></label>
+      <div class="two-cols"><label>Papel<input data-key="paperColor" type="color"></label><label>Tinta<input data-key="inkColor" type="color"></label></div>
+      <label>Color de acento<input data-key="accentColor" type="color"></label>
+      <label>Barra inferior<select data-key="showFooterBar"><option value="true">Mostrar</option><option value="false">Ocultar</option></select></label>
     </details>
-
-    <div class="help"><strong>Formato fijo:</strong> A4 horizontal (297 × 210 mm). La previsualización mantiene exactamente la orientación de impresión. Puedes usar logos y firmas como imágenes y elegir tipografías de Google o cargar una fuente descargada de DaFont.</div>
+    <div class="help"><strong>Formato:</strong> A4 297 × 210 mm, siempre horizontal. La hoja del editor mantiene la misma proporción que el PDF.</div>
   </aside>
 
-  <section class="preview-area">
-    <div class="preview-wrap">
-      <article id="certificate" class="certificate">
-        <div class="certificate-inner">
-          <div class="top-logo-area">
-            <img id="topImage" class="top-image" alt="Logo del certificado" hidden>
-            <div id="logoText" class="logo-text" data-preview="logo"></div>
-          </div>
-          <div class="eyebrow" data-preview="eyebrow"></div>
-          <h2 class="title" data-preview="title"></h2>
-          <div class="ornament">〰〰〰</div>
-          <div class="intro" data-preview="subtitle"></div>
-          <div class="name" data-preview="name"></div>
-          <div class="body" data-preview="body"></div>
-          <div class="quote" data-preview="quote"></div>
-          <div class="verse" data-preview="verse"></div>
-          <div class="meta"><span data-preview="date"></span><span data-preview="taxId"></span></div>
-          <div class="address" data-preview="address"></div>
-          <div class="signatures">
-            <div class="signature">
-              <img id="leftSignatureImage" class="signature-image" alt="Firma izquierda" hidden>
-              <div class="signature-line"></div><div class="role" data-preview="leftRole"></div><div class="signer" data-preview="leftSignature"></div>
+  <section class="editor-area">
+    <div class="canvas-toolbar no-print">
+      <div class="canvas-tools"><button type="button" id="zoomOut">−</button><span id="zoomLabel">100%</span><button type="button" id="zoomIn">+</button><button type="button" id="fitCanvas">⛶</button></div>
+      <div class="dimensions"><strong>Ancho:</strong> 297 mm <span>·</span> <strong>Alto:</strong> 210 mm</div>
+      <div class="view-toggle"><button type="button" class="active">✥ Modo edición</button><button type="button" id="previewMode">▣ Vista previa</button></div>
+    </div>
+    <div class="canvas-scroller">
+      <div class="canvas-holder" id="canvasHolder">
+        <article id="certificate" class="certificate">
+          <div class="certificate-inner">
+            <div class="top-logo-area"><img id="topImage" class="top-image" alt="Logo" hidden><div id="logoText" class="logo-fallback">✦</div></div>
+            <div class="eyebrow" data-preview="eyebrow"></div>
+            <h2 class="title" data-preview="title"></h2>
+            <div class="ornament" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="intro" data-preview="subtitle"></div>
+            <div class="name" data-preview="name"></div>
+            <div class="body" data-preview="body"></div>
+            <div class="quote" data-preview="quote"></div>
+            <div class="verse" data-preview="verse"></div>
+            <div class="meta"><span data-preview="date"></span><span data-preview="taxId"></span></div>
+            <div class="address" data-preview="address"></div>
+            <div class="signatures">
+              <div class="signature"><img id="leftSignatureImage" class="signature-image" alt="Firma izquierda" hidden><div class="signature-line"></div><div class="role" data-preview="leftRole"></div><div class="signer" data-preview="leftSignature"></div></div>
+              <div class="center-mark">◉</div>
+              <div class="signature"><img id="rightSignatureImage" class="signature-image" alt="Firma derecha" hidden><div class="signature-line"></div><div class="role" data-preview="rightRole"></div><div class="signer" data-preview="rightSignature"></div></div>
             </div>
-            <div class="mark" data-preview="footerMark"></div>
-            <div class="signature">
-              <img id="rightSignatureImage" class="signature-image" alt="Firma derecha" hidden>
-              <div class="signature-line"></div><div class="role" data-preview="rightRole"></div><div class="signer" data-preview="rightSignature"></div>
-            </div>
+            <div class="footer-bar"></div>
           </div>
-          <div class="footer-bar"></div>
-        </div>
-      </article>
+        </article>
+      </div>
     </div>
   </section>
 </main>
