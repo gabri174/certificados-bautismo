@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generador de certificados</title><link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="topbar no-print"><div><div class="brand">Certificados</div><div class="muted">autom.ensupresencia.eu</div></div><div class="toolbar"><button id="loadTemplates">Cargar plantillas</button><button id="saveCertificate" class="primary">Guardar certificado</button><button id="print" class="primary">Imprimir / Guardar PDF</button></div></header>
+<main class="workspace">
+<aside class="panel no-print">
+<div class="panel-head"><h1>Editor</h1><span class="pill">MVP</span></div>
+<label>Plantilla<select id="templateSelect"></select></label>
+<label>Clave de administración<input id="adminToken" type="password" placeholder="ADMIN_TOKEN"></label>
+<details open><summary>Contenido</summary>
+<label>Eyebrow<input data-key="eyebrow"></label><label>Título<input data-key="title"></label><label>Subtítulo<input data-key="subtitle"></label><label>Nombre<input data-key="name"></label><label>Texto principal<textarea data-key="body"></textarea></label><label>Cita<textarea data-key="quote"></textarea></label><label>Versículo<input data-key="verse"></label><label>Fecha<input data-key="date"></label><label>CIF<input data-key="taxId"></label><label>Dirección<input data-key="address"></label>
+</details>
+<details><summary>Firmas</summary><label>Firma izquierda<input data-key="leftSignature"></label><label>Cargo izquierdo<input data-key="leftRole"></label><label>Firma derecha<input data-key="rightSignature"></label><label>Cargo derecho<input data-key="rightRole"></label></details>
+<details><summary>Diseño</summary><label>Color del papel<input data-key="paperColor" type="color"></label><label>Color tinta<input data-key="inkColor" type="color"></label><label>Color acento<input data-key="accentColor" type="color"></label><label>Marca superior<input data-key="logo"></label><label>Marca inferior<input data-key="footerMark"></label></details>
+<div class="help"><strong>Nota:</strong> la foto sirve como referencia visual. La plantilla no reutiliza las firmas ni los datos personales de la fotografía.</div>
+</aside>
+<section class="preview-area"><div class="preview-wrap"><article id="certificate" class="certificate"><div class="top-space"></div><div class="eyebrow" data-preview="eyebrow"></div><h2 class="title" data-preview="title"></h2><div class="waves" data-preview="logo"></div><div class="intro" data-preview="subtitle"></div><div class="name script" data-preview="name"></div><div class="body" data-preview="body"></div><div class="quote" data-preview="quote"></div><div class="verse" data-preview="verse"></div><div class="meta"><span data-preview="date"></span><span data-preview="taxId"></span></div><div class="address" data-preview="address"></div><div class="signatures"><div class="signature"><div class="signature-line"></div><div class="role" data-preview="leftRole"></div><div class="signer" data-preview="leftSignature"></div></div><div class="mark" data-preview="footerMark"></div><div class="signature"><div class="signature-line"></div><div class="role" data-preview="rightRole"></div><div class="signer" data-preview="rightSignature"></div></div></div><div class="footer-bar"></div></article></div></section>
+</main><script src="/app.js"></script>
+</body></html>
