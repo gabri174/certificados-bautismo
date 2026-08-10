@@ -3,6 +3,7 @@
   "name": "certificados-bautismo",
   "main": "src/index.js",
   "compatibility_date": "2026-08-10",
+  "workers_dev": true,
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
@@ -12,14 +13,8 @@
     {
       "binding": "DB",
       "database_name": "bautismos",
-"database_id": "aaa09101-4d09-4c2c-af33-2df3b5863e13",
+      "database_id": "aaa09101-4d09-4c2c-af33-2df3b5863e13",
       "migrations_dir": "migrations"
-    }
-  ],
-  "routes": [
-    {
-      "pattern": "autom.ensupresencia.eu",
-      "custom_domain": true
     }
   ]
 }
