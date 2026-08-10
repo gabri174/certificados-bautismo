@@ -11,8 +11,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "certificados-db",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_name": "bautismos",
+"database_id": "aaa09101-4d09-4c2c-af33-2df3b5863e13",
       "migrations_dir": "migrations"
     }
   ],
