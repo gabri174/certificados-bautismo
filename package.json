@@ -1,0 +1,15 @@
+{
+  "name": "certificados-bautismo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 migrations apply certificados-db --local",
+    "db:remote": "wrangler d1 migrations apply certificados-db --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.30.0"
+  }
+}
