@@ -1,15 +1,101 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-ES">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#172a4a">
-  <title>Certificados · Editor</title>
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Generador y editor de certificados de bautismo de En Su Presencia. Crea certificados A4 horizontales, personaliza textos, tipografías, imágenes y firmas, y guarda o imprime en PDF.">
+  <meta name="author" content="En Su Presencia">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <title>Generador de Certificados de Bautismo | En Su Presencia</title>
+  <link rel="canonical" href="https://autom.ensupresencia.eu/">
+  <link rel="alternate" hreflang="es-ES" href="https://autom.ensupresencia.eu/">
+
+  <!-- Identidad visual oficial de En Su Presencia -->
+  <link rel="icon" type="image/png" href="https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png">
+  <link rel="apple-touch-icon" href="https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="En Su Presencia">
+  <meta property="og:title" content="Generador de Certificados de Bautismo | En Su Presencia">
+  <meta property="og:description" content="Editor online de certificados de bautismo en formato A4 horizontal. Personaliza textos, tipografías, imágenes y firmas y genera tu certificado listo para imprimir o guardar en PDF.">
+  <meta property="og:url" content="https://autom.ensupresencia.eu/">
+  <meta property="og:image" content="https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png">
+  <meta property="og:image:alt" content="En Su Presencia">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Generador de Certificados de Bautismo | En Su Presencia">
+  <meta name="twitter:description" content="Crea certificados de bautismo A4 horizontales y personalizados con el editor online de En Su Presencia.">
+  <meta name="twitter:image" content="https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png">
+  <meta name="twitter:image:alt" content="En Su Presencia">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/seo.css">
+
+  <!-- Datos estructurados: organización, sitio web y aplicación -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {
+        "@type":"Organization",
+        "@id":"https://www.ensupresencia.es/#organization",
+        "name":"En Su Presencia",
+        "url":"https://www.ensupresencia.es/",
+        "logo":"https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png",
+        "email":"info@ensupresencia.es",
+        "address":{
+          "@type":"PostalAddress",
+          "streetAddress":"Carrer del Periodista Roberto Castrovido, 3",
+          "postalCode":"46014",
+          "addressLocality":"Valencia",
+          "addressCountry":"ES"
+        }
+      },
+      {
+        "@type":"WebSite",
+        "@id":"https://autom.ensupresencia.eu/#website",
+        "url":"https://autom.ensupresencia.eu/",
+        "name":"Generador de Certificados de Bautismo | En Su Presencia",
+        "description":"Editor online de certificados de bautismo en formato A4 horizontal.",
+        "publisher":{"@id":"https://www.ensupresencia.es/#organization"},
+        "inLanguage":"es-ES"
+      },
+      {
+        "@type":"WebApplication",
+        "@id":"https://autom.ensupresencia.eu/#application",
+        "url":"https://autom.ensupresencia.eu/",
+        "name":"Generador de Certificados de Bautismo",
+        "description":"Aplicación web para crear, editar, guardar e imprimir certificados de bautismo en A4 horizontal.",
+        "applicationCategory":"BusinessApplication",
+        "operatingSystem":"Web",
+        "browserRequirements":"Requiere un navegador web moderno con JavaScript habilitado.",
+        "inLanguage":"es-ES",
+        "publisher":{"@id":"https://www.ensupresencia.es/#organization"},
+        "image":"https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png"
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 <header class="topbar no-print">
-  <div class="brand-block"><div class="brand">Certificados</div><div class="muted">autom.ensupresencia.eu · Editor A4 horizontal</div></div>
+  <div class="brand-block">
+    <a class="brand-link" href="https://www.ensupresencia.es/" target="_blank" rel="noopener" aria-label="En Su Presencia">
+      <img class="brand-logo" src="https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png" alt="En Su Presencia" width="120" height="52" decoding="async">
+    </a>
+    <div><div class="brand">Certificados de Bautismo</div><div class="muted">En Su Presencia · Editor A4 horizontal</div></div>
+  </div>
   <div class="top-actions">
     <button id="loadTemplates">Cargar plantillas</button>
     <button id="saveTemplate">Guardar plantilla</button>
@@ -82,17 +168,17 @@
     <div class="help"><strong>Formato:</strong> A4 297 × 210 mm. Haz clic sobre cualquier elemento del certificado para seleccionarlo, arrástralo y ajusta tamaño, posición, tipografía, color, rotación y opacidad.</div>
   </aside>
 
-  <section class="editor-area">
+  <section class="editor-area" aria-label="Editor de certificado de bautismo">
     <div class="canvas-toolbar no-print">
-      <div class="canvas-tools"><button type="button" id="zoomOut">−</button><span id="zoomLabel">100%</span><button type="button" id="zoomIn">+</button><button type="button" id="fitCanvas">⛶</button></div>
+      <div class="canvas-tools"><button type="button" id="zoomOut" aria-label="Alejar">−</button><span id="zoomLabel">100%</span><button type="button" id="zoomIn" aria-label="Acercar">+</button><button type="button" id="fitCanvas" aria-label="Ajustar certificado a la pantalla">⛶</button></div>
       <div class="dimensions"><strong>Ancho:</strong> 297 mm <span>·</span> <strong>Alto:</strong> 210 mm</div>
       <div class="view-toggle"><button type="button" class="active">✥ Modo edición</button><button type="button" id="previewMode">▣ Vista previa</button></div>
     </div>
     <div class="canvas-scroller">
       <div class="canvas-holder" id="canvasHolder">
-        <article id="certificate" class="certificate">
+        <article id="certificate" class="certificate" aria-label="Certificado de bautismo A4 horizontal">
           <div class="certificate-inner">
-            <div class="top-logo-area editable-element" data-edit="topLogo"><img id="topImage" class="top-image" alt="Logo" hidden><div id="logoText" class="logo-fallback">✦</div></div>
+            <div class="top-logo-area editable-element" data-edit="topLogo"><img id="topImage" class="top-image" alt="Logo del certificado" hidden><div id="logoText" class="logo-fallback">✦</div></div>
             <div class="eyebrow editable-element" data-edit="eyebrow" data-preview="eyebrow"></div>
             <h2 class="title editable-element" data-edit="title" data-preview="title"></h2>
             <div class="ornament editable-element" data-edit="ornament" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -115,6 +201,21 @@
     </div>
   </section>
 </main>
+
+<section class="seo-content no-print" aria-labelledby="seo-title">
+  <div class="seo-content-inner">
+    <h2 id="seo-title">Generador de certificados de bautismo</h2>
+    <p>Herramienta online de <strong>En Su Presencia</strong> para crear y personalizar certificados de bautismo en formato A4 horizontal. Puedes editar el contenido, elegir tipografías, incorporar el logotipo y las firmas, ajustar cada elemento y preparar el documento para imprimir o guardar en PDF.</p>
+    <p>El editor está pensado para facilitar la preparación de certificados oficiales de bautismo de la comunidad de En Su Presencia, manteniendo una presentación limpia y lista para impresión.</p>
+    <p><a href="https://www.ensupresencia.es/" target="_blank" rel="noopener">Conoce En Su Presencia</a> · <a href="https://www.ensupresencia.es/conoce-nuestra-casa/" target="_blank" rel="noopener">Conoce nuestra casa</a></p>
+  </div>
+</section>
+
+<footer class="seo-footer no-print">
+  <span>© En Su Presencia · Valencia, España</span>
+  <a href="https://www.ensupresencia.es/" target="_blank" rel="noopener">ensupresencia.es</a>
+</footer>
+
 <script src="/config.js"></script><script src="/app.js"></script>
 </body>
 </html>
