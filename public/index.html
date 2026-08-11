@@ -24,6 +24,18 @@
     <label>Plantilla<select id="templateSelect"></select></label>
     <label class="password-label">Clave de administración<div class="password-wrap"><input id="adminToken" type="password" placeholder="ADMIN_TOKEN"><button id="toggleToken" type="button" aria-label="Mostrar clave">◉</button></div></label>
 
+    <section id="elementEditor" class="element-editor" hidden>
+      <div class="element-head"><div><span class="eyebrow-small">Elemento seleccionado</span><strong id="selectedElementName">Ninguno</strong></div><button id="clearSelection" type="button" title="Cerrar">×</button></div>
+      <div class="element-actions"><button id="bringForward" type="button" title="Traer al frente">↑</button><button id="sendBackward" type="button" title="Enviar atrás">↓</button><button id="hideElement" type="button" title="Mostrar / ocultar">◉</button></div>
+      <div class="control-section"><h3>Tamaño</h3><div class="two-cols"><label>Ancho (mm)<input id="elementWidth" type="number" step="0.5" min="1"></label><label>Alto (mm)<input id="elementHeight" type="number" step="0.5" min="1"></label></div><label class="check-row"><input id="keepRatio" type="checkbox" checked> Mantener proporción</label></div>
+      <div class="control-section"><h3>Posición</h3><div class="two-cols"><label>X (mm)<input id="elementX" type="number" step="0.5"></label><label>Y (mm)<input id="elementY" type="number" step="0.5"></label></div></div>
+      <div id="textControls">
+        <div class="control-section"><h3>Tipografía</h3><label>Fuente<select id="elementFont"></select></label><label>Peso<select id="elementWeight"><option value="400">Normal</option><option value="500">Medio</option><option value="600">Seminegrita</option><option value="700">Negrita</option><option value="800">Extra negrita</option><option value="900">Negro</option></select></label><label>Tamaño <div class="range-line"><input id="elementFontSize" type="range" min="6" max="120" step="1"><output id="elementFontSizeOut">64 px</output></div></label><label>Espaciado <div class="range-line"><input id="elementLetterSpacing" type="range" min="-4" max="12" step="0.5"><output id="elementLetterSpacingOut">0 px</output></div></label><label>Interlineado <div class="range-line"><input id="elementLineHeight" type="range" min="0.7" max="2.2" step="0.05"><output id="elementLineHeightOut">1</output></div></label></div>
+        <div class="control-section"><h3>Estilo</h3><div class="style-buttons"><button id="alignLeft" type="button">≡</button><button id="alignCenter" type="button">≡</button><button id="alignRight" type="button">≡</button><button id="toggleBold" type="button"><b>B</b></button><button id="toggleItalic" type="button"><i>I</i></button><button id="toggleUnderline" type="button"><u>U</u></button><button id="toggleStrike" type="button"><s>S</s></button></div><label>Color <input id="elementColor" type="color"></label></div>
+        <div class="control-section"><h3>Más opciones</h3><label>Rotación <div class="range-line"><input id="elementRotation" type="range" min="-180" max="180" step="1"><output id="elementRotationOut">0°</output></div></label><label>Opacidad <div class="range-line"><input id="elementOpacity" type="range" min="0" max="100" step="1"><output id="elementOpacityOut">100%</output></div></label></div>
+      </div>
+    </section>
+
     <details open><summary>Marca superior</summary>
       <div class="upload-box" id="topUploadBox"><span class="upload-icon">▧</span><strong>Arrastra una imagen o haz clic</strong><small>PNG, JPG, WEBP o SVG · máx. 900 KB</small><input id="topImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></div>
       <button id="removeTopImage" type="button" class="danger-outline">Quitar logo</button>
@@ -67,7 +79,7 @@
       <label>Color de acento<input data-key="accentColor" type="color"></label>
       <label>Barra inferior<select data-key="showFooterBar"><option value="true">Mostrar</option><option value="false">Ocultar</option></select></label>
     </details>
-    <div class="help"><strong>Formato:</strong> A4 297 × 210 mm, siempre horizontal. La hoja del editor mantiene la misma proporción que el PDF.</div>
+    <div class="help"><strong>Formato:</strong> A4 297 × 210 mm. Haz clic sobre cualquier elemento del certificado para seleccionarlo, arrástralo y ajusta tamaño, posición, tipografía, color, rotación y opacidad.</div>
   </aside>
 
   <section class="editor-area">
@@ -80,23 +92,23 @@
       <div class="canvas-holder" id="canvasHolder">
         <article id="certificate" class="certificate">
           <div class="certificate-inner">
-            <div class="top-logo-area"><img id="topImage" class="top-image" alt="Logo" hidden><div id="logoText" class="logo-fallback">✦</div></div>
-            <div class="eyebrow" data-preview="eyebrow"></div>
-            <h2 class="title" data-preview="title"></h2>
-            <div class="ornament" aria-hidden="true"><span></span><span></span><span></span></div>
-            <div class="intro" data-preview="subtitle"></div>
-            <div class="name" data-preview="name"></div>
-            <div class="body" data-preview="body"></div>
-            <div class="quote" data-preview="quote"></div>
-            <div class="verse" data-preview="verse"></div>
-            <div class="meta"><span data-preview="date"></span><span data-preview="taxId"></span></div>
-            <div class="address" data-preview="address"></div>
+            <div class="top-logo-area editable-element" data-edit="topLogo"><img id="topImage" class="top-image" alt="Logo" hidden><div id="logoText" class="logo-fallback">✦</div></div>
+            <div class="eyebrow editable-element" data-edit="eyebrow" data-preview="eyebrow"></div>
+            <h2 class="title editable-element" data-edit="title" data-preview="title"></h2>
+            <div class="ornament editable-element" data-edit="ornament" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="intro editable-element" data-edit="intro" data-preview="subtitle"></div>
+            <div class="name editable-element" data-edit="name" data-preview="name"></div>
+            <div class="body editable-element" data-edit="body" data-preview="body"></div>
+            <div class="quote editable-element" data-edit="quote" data-preview="quote"></div>
+            <div class="verse editable-element" data-edit="verse" data-preview="verse"></div>
+            <div class="meta editable-element" data-edit="meta"><span data-preview="date"></span><span data-preview="taxId"></span></div>
+            <div class="address editable-element" data-edit="address" data-preview="address"></div>
             <div class="signatures">
-              <div class="signature"><img id="leftSignatureImage" class="signature-image" alt="Firma izquierda" hidden><div class="signature-line"></div><div class="role" data-preview="leftRole"></div><div class="signer" data-preview="leftSignature"></div></div>
-              <div class="center-mark">◉</div>
-              <div class="signature"><img id="rightSignatureImage" class="signature-image" alt="Firma derecha" hidden><div class="signature-line"></div><div class="role" data-preview="rightRole"></div><div class="signer" data-preview="rightSignature"></div></div>
+              <div class="signature editable-element" data-edit="leftSignature"><img id="leftSignatureImage" class="signature-image" alt="Firma izquierda" hidden><div class="signature-line"></div><div class="role" data-preview="leftRole"></div><div class="signer" data-preview="leftSignature"></div></div>
+              <div class="center-mark editable-element" data-edit="centerMark">◉</div>
+              <div class="signature editable-element" data-edit="rightSignature"><img id="rightSignatureImage" class="signature-image" alt="Firma derecha" hidden><div class="signature-line"></div><div class="role" data-preview="rightRole"></div><div class="signer" data-preview="rightSignature"></div></div>
             </div>
-            <div class="footer-bar"></div>
+            <div class="footer-bar editable-element" data-edit="footerBar"></div>
           </div>
         </article>
       </div>
