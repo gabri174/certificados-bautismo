@@ -1,0 +1,20 @@
+{
+  "name": "Generador de Certificados de Bautismo | En Su Presencia",
+  "short_name": "Certificados",
+  "description": "Editor online de certificados de bautismo en formato A4 horizontal.",
+  "lang": "es-ES",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#172a4a",
+  "icons": [
+    {
+      "src": "https://www.ensupresencia.es/wp-content/uploads/2025/04/logo_nuevo_VALENCIA.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
