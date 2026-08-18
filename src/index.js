@@ -22,12 +22,6 @@ function base64url(bytes) {
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
-function fromBase64url(value) {
-  const padded = value.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((value.length + 3) % 4);
-  const binary = atob(padded);
-  return Uint8Array.from(binary, c => c.charCodeAt(0));
-}
-
 async function hmac(value, secret) {
   const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
   return base64url(new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(value))));
@@ -93,6 +87,10 @@ export default {
 
     if (url.pathname.startsWith("/api/")) {
       try {
+        if (url.pathname === "/api/health" && request.method === "GET") {
+          return cors(json({ ok: true, worker: "certificados-bautismo", d1: !!env.DB, adminConfigured: !!env.ADMIN_PASSWORD }));
+        }
+
         if (url.pathname === "/api/admin/login" && request.method === "POST") {
           const body = await readBody(request);
           if (!env.ADMIN_PASSWORD) return cors(json({ error: "La contraseña de administración todavía no está configurada en Cloudflare." }, 503));
@@ -104,7 +102,7 @@ export default {
         if (url.pathname === "/api/admin/session" && request.method === "GET") return cors(json({ authenticated: await validSession(request, env) }));
         if (url.pathname === "/api/admin/logout" && request.method === "POST") return cors(json({ ok: true }, 200, clearSessionHeaders()));
 
-        const protectedRoute = ["/api/certificates", "/api/certificates/bulk", "/api/templates"].includes(url.pathname) && request.method !== "GET" || url.pathname === "/api/certificates" && request.method === "GET";
+        const protectedRoute = ((["/api/certificates", "/api/certificates/bulk", "/api/templates"].includes(url.pathname) && request.method !== "GET") || (url.pathname === "/api/certificates" && request.method === "GET"));
         if (protectedRoute && !(await validSession(request, env))) return cors(json({ error: "No autorizado" }, 401));
 
         if (url.pathname === "/api/generate" && request.method === "POST") {
