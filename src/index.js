@@ -55,11 +55,27 @@ export default {
           const templateId = cleanName(body?.template_id || "bautismo-clasico");
           if (name.length < 3) return cors(json({ error: "El nombre completo es obligatorio." }, 400));
           if (name.length > 160) return cors(json({ error: "El nombre es demasiado largo." }, 400));
-
           const id = newId("cert");
           const data = { name, status: "generated", source: "individual", template_id: templateId };
           await env.DB.prepare("INSERT INTO certificates (id, template_id, data_json, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)").bind(id, templateId, JSON.stringify(data)).run();
           return cors(json({ ok: true, id, name }));
+        }
+
+        if (url.pathname === "/api/certificates/bulk" && request.method === "POST") {
+          if (!authorized(request, env)) return cors(json({ error: "No autorizado" }, 401));
+          const body = await readBody(request);
+          const templateId = cleanName(body?.template_id || "bautismo-clasico");
+          const names = Array.isArray(body?.names) ? [...new Set(body.names.map(cleanName).filter(name => name.length >= 3))] : [];
+          if (!names.length) return cors(json({ error: "No se encontraron nombres válidos." }, 400));
+          if (names.length > 500) return cors(json({ error: "La carga máxima es de 500 nombres por archivo." }, 400));
+
+          const statements = names.map(name => {
+            const id = newId("cert");
+            const data = { name, status: "generated", source: "bulk", template_id: templateId };
+            return env.DB.prepare("INSERT INTO certificates (id, template_id, data_json, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)").bind(id, templateId, JSON.stringify(data));
+          });
+          await env.DB.batch(statements);
+          return cors(json({ ok: true, created: names.length, names }));
         }
 
         if (url.pathname === "/api/templates" && request.method === "GET") {
