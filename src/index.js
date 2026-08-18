@@ -15,13 +15,53 @@ function authorized(request, env) {
   return Boolean(env.ADMIN_TOKEN) && request.headers.get("x-admin-token") === env.ADMIN_TOKEN;
 }
 
+function newId(prefix = "cert") {
+  return `${prefix}_${crypto.randomUUID()}`;
+}
+
+function cleanName(value) {
+  return String(value || "").trim().replace(/\s+/g, " ").slice(0, 160);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
     if (request.method === "OPTIONS") return cors(new Response(null, { status: 204 }));
+
+    if (url.pathname === "/") {
+      return env.ASSETS.fetch(new Request(new URL("/generar.html", request.url), request));
+    }
+
+    if (url.pathname === "/editor" || url.pathname === "/editor/") {
+      const name = cleanName(url.searchParams.get("name"));
+      const certificateId = cleanName(url.searchParams.get("certificate"));
+      const page = await env.ASSETS.fetch(new Request(new URL("/index.html", request.url), request));
+      if (!name) return page;
+      const safeName = JSON.stringify(name);
+      const safeCertificate = JSON.stringify(certificateId);
+      return new HTMLRewriter().on("body", {
+        element(element) {
+          element.append(`<script>(function(){const name=${safeName},certificateId=${safeCertificate};window.__GENERATED_CERTIFICATE__={id:certificateId,name};function apply(){const input=document.querySelector('input[data-key="name"]');if(!input)return false;input.value=name;input.dispatchEvent(new Event('input',{bubbles:true}));return true;}if(!apply()){let n=0;const t=setInterval(()=>{if(apply()||++n>50)clearInterval(t)},100);}})();</script>`, { html: true });
+        }
+      }).transform(page);
+    }
 
     if (url.pathname.startsWith("/api/")) {
       try {
+        if (url.pathname === "/api/generate" && request.method === "POST") {
+          const body = await readBody(request);
+          const name = cleanName(body?.name);
+          const templateId = cleanName(body?.template_id || "bautismo-clasico");
+          if (name.length < 3) return cors(json({ error: "El nombre completo es obligatorio." }, 400));
+          if (name.length > 160) return cors(json({ error: "El nombre es demasiado largo." }, 400));
+
+          const id = newId("cert");
+          const data = { name, status: "generated", source: "individual", template_id: templateId };
+          await env.DB.prepare("INSERT INTO certificates (id, template_id, data_json, updated_at) VALUES (?, ?, ?, CURRENT_TIMESTAMP)").bind(id, templateId, JSON.stringify(data)).run();
+          return cors(json({ ok: true, id, name }));
+        }
+
         if (url.pathname === "/api/templates" && request.method === "GET") {
           const rows = await env.DB.prepare("SELECT id, name, data_json, created_at, updated_at FROM templates ORDER BY name").all();
           return cors(json(rows.results.map(row => ({ ...row, data: JSON.parse(row.data_json) }))));
@@ -55,6 +95,7 @@ export default {
         return cors(json({ error: "Error interno", detail: error.message }, 500));
       }
     }
+
     return env.ASSETS.fetch(request);
   }
 };
