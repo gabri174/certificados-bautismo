@@ -33,6 +33,10 @@ export default {
       return env.ASSETS.fetch(new Request(new URL("/generar.html", request.url), request));
     }
 
+    if (url.pathname === "/admin" || url.pathname === "/admin/") {
+      return env.ASSETS.fetch(new Request(new URL("/admin.html", request.url), request));
+    }
+
     if (url.pathname === "/editor" || url.pathname === "/editor/") {
       const name = cleanName(url.searchParams.get("name"));
       const certificateId = cleanName(url.searchParams.get("certificate"));
@@ -68,7 +72,6 @@ export default {
           const names = Array.isArray(body?.names) ? [...new Set(body.names.map(cleanName).filter(name => name.length >= 3))] : [];
           if (!names.length) return cors(json({ error: "No se encontraron nombres válidos." }, 400));
           if (names.length > 500) return cors(json({ error: "La carga máxima es de 500 nombres por archivo." }, 400));
-
           const statements = names.map(name => {
             const id = newId("cert");
             const data = { name, status: "generated", source: "bulk", template_id: templateId };
