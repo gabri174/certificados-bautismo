@@ -1,0 +1,1 @@
+If Apache does not honor parent .htaccess, use this directory's index.php directly.
