@@ -1,0 +1,1 @@
+Do not expose this directory listing. The bridge is routed by Apache to index.php.
