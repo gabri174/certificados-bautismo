@@ -1,13 +1,13 @@
-# API proxy: mantén el frontend en ServerByt y reenvía /api/* al backend Cloudflare Worker.
-# Requiere Apache con mod_rewrite + mod_proxy + mod_proxy_http habilitados por el hosting.
-# Si el hosting no permite proxy desde .htaccess, usa el endpoint PHP de api/ como fallback.
+# Frontend y API en el mismo dominio.
+# /api/* se procesa en ServerByt y se reenvía internamente al Worker desde PHP.
+# No hay redirección al dominio workers.dev y no hace falta cambiar DNS.
 
 RewriteEngine On
 
-# Nunca reescribir el endpoint API a index.html.
-RewriteRule ^api(?:/(.*))?$ https://0949daf4-bautismos.ensupresenciacrtv.workers.dev/api/$1 [P,L,NE]
+# API: nunca dejar que /api/* caiga en el fallback de la SPA.
+RewriteRule ^api(?:/.*)?$ api/index.php [L,QSA]
 
-# SPA/static fallback (si aplica al frontend).
+# Frontend SPA/static fallback.
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [L]
